@@ -1,3 +1,4 @@
+import { PostExistPipe } from './pipes/post-exist.pipe';
 import {
   Body,
   Controller,
@@ -11,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import type { Post as PostInterface } from './interface/post.interface';
+import { CreatePostDto, UpdatePostDto } from './dto/create-post-dto';
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postService: PostsService) {}
@@ -31,19 +33,15 @@ export class PostsController {
   }
 
   @Post('/')
-  addNew(
-    @Body() newPostData: Omit<PostInterface, 'id' | 'createdAt' | 'updatedAt'>,
-  ): PostInterface {
+  addNew(@Body() newPostData: CreatePostDto): PostInterface {
     return this.postService.addNew(newPostData);
   }
 
   @Patch('/:id')
   updatePost(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe, PostExistPipe) id: number,
     @Body()
-    updatedPostData: Partial<
-      Omit<PostInterface, 'id' | 'createdAt' | 'updatedAt'>
-    >,
+    updatedPostData: UpdatePostDto,
   ): PostInterface {
     return this.postService.updatePost(id, updatedPostData);
   }
