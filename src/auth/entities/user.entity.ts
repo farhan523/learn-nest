@@ -18,13 +18,13 @@ export class User {
   id!: number;
 
   @Column()
-  name!: string;
+  name: string;
 
   @Column()
-  password!: string;
+  password: string;
 
   @Column({ unique: true })
-  email!: string;
+  email: string;
 
   @Column({
     type: 'enum',

@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/regestier.dto';
+import { LoginUserDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -24,6 +25,17 @@ export class AuthController {
         { user: null, message: (error as Error).message },
         HttpStatus.BAD_REQUEST,
       );
+    }
+  }
+
+  @Post('login')
+  async login(
+    @Body() user: LoginUserDto,
+  ): Promise<{ accessToken: string } | null> {
+    try {
+      return await this.authService.login(user.email, user.password);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
     }
   }
 }
