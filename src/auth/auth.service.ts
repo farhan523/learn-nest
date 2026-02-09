@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User as userEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
@@ -118,5 +122,13 @@ export class AuthService {
       return await this.generateTokens(user);
     }
     return null;
+  }
+
+  async findUserById(id: number): Promise<Omit<userEntity, 'password'>> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) throw new NotFoundException('User not found');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...result } = user;
+    return result;
   }
 }
