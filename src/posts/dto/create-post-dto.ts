@@ -12,12 +12,6 @@ export class CreatePostDto {
   @IsString({ message: 'content must be a string' })
   @MinLength(3, { message: 'content must be at least 3 characters long' })
   content!: string;
-
-  @IsNotEmpty({ message: 'authorName is required' })
-  @IsString({ message: 'authorName must be a string' })
-  @MinLength(3, { message: 'authorName must be at least 3 characters long' })
-  @MaxLength(50, { message: 'authorName must be at most 50 characters long' })
-  authorName!: string;
 }
 
 export class UpdatePostDto {
@@ -33,11 +27,4 @@ export class UpdatePostDto {
   @IsString({ message: 'content must be a string' })
   @MinLength(3, { message: 'content must be at least 3 characters long' })
   content?: string;
-
-  @Optional()
-  @IsNotEmpty({ message: 'authorName is required' })
-  @IsString({ message: 'authorName must be a string' })
-  @MinLength(3, { message: 'authorName must be at least 3 characters long' })
-  @MaxLength(50, { message: 'authorName must be at most 50 characters long' })
-  authorName?: string;
 }

@@ -18,13 +18,13 @@ export class User {
   id!: number;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column()
-  password: string;
+  password!: string;
 
   @Column({ unique: true })
-  email: string;
+  email!: string;
 
   @Column({
     type: 'enum',
@@ -33,7 +33,7 @@ export class User {
   })
   role: UserRole = UserRole.USER;
 
-  @OneToMany(() => Post, (post) => post.authorName)
+  @OneToMany(() => Post, (post) => post.author)
   posts?: Post[];
 
   @CreateDateColumn()
