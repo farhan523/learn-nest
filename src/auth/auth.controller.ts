@@ -12,6 +12,7 @@ import { CreateUserDto } from './dto/regestier.dto';
 import { LoginUserDto } from './dto/login.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
+import { LoginThrottlerGuard } from './guards/login-throttler.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -32,6 +33,7 @@ export class AuthController {
     }
   }
 
+  @UseGuards(LoginThrottlerGuard)
   @Post('login')
   async login(
     @Body() user: LoginUserDto,
@@ -39,7 +41,10 @@ export class AuthController {
     try {
       return await this.authService.login(user.email, user.password);
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
+      throw new HttpException(
+        { message: (error as Error).message },
+        HttpStatus.UNAUTHORIZED,
+      );
     }
   }
 
